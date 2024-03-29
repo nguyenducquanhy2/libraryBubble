@@ -1,4 +1,4 @@
-package com.example.librarybuble
+package com.example.bubbleshowtooltips
 
 class BubbleShowCaseSequence{
     private val mBubbleShowCaseBuilderList = ArrayList<BubbleShowCaseBuilder>()

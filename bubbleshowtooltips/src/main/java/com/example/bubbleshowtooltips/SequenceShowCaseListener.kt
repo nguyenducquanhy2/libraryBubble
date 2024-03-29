@@ -1,4 +1,4 @@
-package com.example.librarybuble
+package com.example.bubbleshowtooltips
 
 interface SequenceShowCaseListener {
     fun onDismiss()

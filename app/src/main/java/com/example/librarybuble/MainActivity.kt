@@ -8,6 +8,10 @@ import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import com.example.bubbleshowtooltips.BubbleShowCase
+import com.example.bubbleshowtooltips.BubbleShowCaseBuilder
+import com.example.bubbleshowtooltips.BubbleShowCaseListener
+import com.example.bubbleshowtooltips.BubbleShowCaseSequence
 
 class MainActivity : AppCompatActivity() {
     private lateinit var buttonSimpleShowCase: AppCompatButton
@@ -99,7 +103,6 @@ class MainActivity : AppCompatActivity() {
             .title("Ai Note")
             .description("( Mới )")
             .backgroundColor(ContextCompat.getColor(this, R.color.colorBlueGray))
-            .closeActionImage(ContextCompat.getDrawable(this, R.drawable.ic_close)!!)
 
             .textColor(ContextCompat.getColor(this,R.color.white)).targetView(buttonColorShowCase)
     }

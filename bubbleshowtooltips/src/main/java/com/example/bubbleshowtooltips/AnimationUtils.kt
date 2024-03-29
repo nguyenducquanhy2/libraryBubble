@@ -1,4 +1,4 @@
-package com.example.librarybuble
+package com.example.bubbleshowtooltips
 
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder

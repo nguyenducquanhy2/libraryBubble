@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "libraryBuble"
 include(":app")
- 
+include(":bubbleshowtooltips")

@@ -1,4 +1,4 @@
-package com.example.librarybuble
+package com.example.bubbleshowtooltips
 
 import android.app.Activity
 import android.content.Context
