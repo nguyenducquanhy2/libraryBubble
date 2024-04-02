@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.util.Log
@@ -14,8 +15,10 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.updatePadding
 import java.lang.ref.WeakReference
 import java.util.ArrayList
 
@@ -26,6 +29,7 @@ class BubbleMessageView : ConstraintLayout {
     private val CORNERSIZE = 20f
     private val MARGIN_LEFT_SCREEN = 20f
     private val MARGIN_RIGHT_SCREEN = 20
+    private val MARGIN_TARGET_VIEW = 10
 
     private val WIDTH_NARROWNESS_RHOMBUS = WIDTH_ARROW / 6
     private val HEIGHT_NARROWNESS_RHOMBUS = WIDTH_ARROW / 6
@@ -129,7 +133,7 @@ class BubbleMessageView : ConstraintLayout {
 
     private fun getViewWidth(): Int = width
 
-    private fun getMargin(): Int = ScreenUtils.dpToPx(20)
+    private fun getMargin(): Int = ScreenUtils.dpToPx(MARGIN_TARGET_VIEW)
 
     private fun getSecurityArrowMargin(): Int = getMargin() + ScreenUtils.dpToPx(2 * WIDTH_ARROW / 3)
 
@@ -137,6 +141,7 @@ class BubbleMessageView : ConstraintLayout {
 
     //REGION SHOW ITEM
 
+    @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
@@ -155,6 +160,7 @@ class BubbleMessageView : ConstraintLayout {
         paint!!.strokeWidth = 4.0f
     }
 
+    @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
     private fun drawRectangle(canvas: Canvas, x: Int, y: Int) {
 
         val displayMetrics = DisplayMetrics()
@@ -178,14 +184,15 @@ class BubbleMessageView : ConstraintLayout {
 
         Log.e("toaDoManHinh", "tọa độ x constrainlayout: ${showCaseMessageViewLayout!!.translationX}" )
         Log.e("toaDoManHinh", "tọa độ y constrainlayout: ${showCaseMessageViewLayout!!.translationY}" )
-
+        showCaseMessageViewLayout!!.updatePadding(bottom = getMargin()*2+targetView!!.height)
         val rect = RectF(getMargin().toFloat()+showCaseMessageViewLayout!!.translationX,
             getMargin().toFloat(),
             showCaseMessageViewLayout!!.translationX+showCaseMessageViewLayout!!.width-ScreenUtils.dpToPx(MARGIN_RIGHT_SCREEN),
-            showCaseMessageViewLayout!!.height.toFloat() - getMargin().toFloat())
+            showCaseMessageViewLayout!!.height.toFloat() - targetView!!.height-getMargin()/2-ScreenUtils.dpToPx(MARGIN_RIGHT_SCREEN)/4)
         canvas.drawRoundRect(rect, CORNERSIZE, CORNERSIZE, paint!!)
     }
 
+    @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
     private fun drawArrow(canvas: Canvas, arrowPosition: BubbleShowCase.ArrowPosition, targetViewLocationOnScreen: RectF?) {
         var xPosition: Int
         var yPosition: Int
@@ -205,7 +212,7 @@ class BubbleMessageView : ConstraintLayout {
             }
             BubbleShowCase.ArrowPosition.BOTTOM -> {
                 xPosition = if(targetViewLocationOnScreen!=null) getArrowHorizontalPositionDependingOnTarget(targetViewLocationOnScreen) else width / 2
-                yPosition = height - getMargin()
+                yPosition = height  -targetView!!.height-getMargin()/2-ScreenUtils.dpToPx(MARGIN_RIGHT_SCREEN)/4
             }
         }
 
@@ -252,7 +259,8 @@ class BubbleMessageView : ConstraintLayout {
     }
 
 
-    private fun drawRhombus(canvas: Canvas,arrowPosition: BubbleShowCase.ArrowPosition, paint: Paint?, x: Int, y: Int, width: Int) {
+    @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
+    private fun drawRhombus(canvas: Canvas, arrowPosition: BubbleShowCase.ArrowPosition, paint: Paint?, x: Int, y: Int, width: Int) {
         val halfRhombusWidth = width / 2
         Log.e("toaDoManHinh", "tọa độ x rhombus: ${x}" )
         Log.e("toaDoManHinh", "tọa độ y rhombus: ${y + halfRhombusWidth}" )

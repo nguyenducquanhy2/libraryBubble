@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -12,278 +13,156 @@ import com.example.bubbleshowtooltips.BubbleShowCase
 import com.example.bubbleshowtooltips.BubbleShowCaseBuilder
 import com.example.bubbleshowtooltips.BubbleShowCaseListener
 import com.example.bubbleshowtooltips.BubbleShowCaseSequence
+import com.example.librarybuble.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var buttonSimpleShowCase: AppCompatButton
-    private lateinit var buttonColorShowCase: AppCompatButton
-    private lateinit var buttonTextSizeShowCase: AppCompatButton
-    private lateinit var buttonArrowLeftShowCase: AppCompatButton
-    private lateinit var buttonArrowRightShowCase: AppCompatButton
-    private lateinit var buttonEventListener: AppCompatButton
-    private lateinit var buttonEventListener1: AppCompatButton
-    private lateinit var buttonEventListener2: AppCompatButton
-    private lateinit var buttonEventListener3: AppCompatButton
-    private lateinit var buttonSequence: AppCompatButton
-    private lateinit var layoutRoot: ConstraintLayout
 
+
+    private lateinit var binding:ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        mappingView()
+        binding=ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setUpListeners()
     }
 
-    private fun mappingView() {
-        buttonSimpleShowCase=findViewById(R.id.buttonSimpleShowCase)
-        buttonColorShowCase=findViewById(R.id.buttonColorShowCase)
-        buttonTextSizeShowCase=findViewById(R.id.buttonTextSizeShowCase)
-        buttonArrowLeftShowCase=findViewById(R.id.buttonArrowLeftShowCase)
-        buttonArrowRightShowCase=findViewById(R.id.buttonArrowRightShowCase)
-        buttonEventListener=findViewById(R.id.buttonEventListener)
-        buttonEventListener1=findViewById(R.id.buttonEventListener1)
-        buttonEventListener2=findViewById(R.id.buttonEventListener2)
-        buttonEventListener3=findViewById(R.id.buttonEventListener3)
-        buttonSequence=findViewById(R.id.buttonSequence)
-        layoutRoot=findViewById(R.id.layoutRoot)
-    }
+//    private fun callApi(){
+//        val retrofit = Retrofit.Builder()
+//            .baseUrl("https://ai.amobear.com/aiemailcalendar/") // Replace with your base URL
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .build()
+//        val apiService = retrofit.create(ApiService::class.java)
+//        CoroutineScope(Dispatchers.IO).launch { // When in a ViewModel
+//            try {
+////                val requestBody = PostGpt(
+////                    messages = listOf(Message("tôi cần bạn việt cho tôi thực đơn trong 1 tuần", "user")),
+////                    model = "gpt-3.5-turbo"
+////                )
+//                val postGPT=PostGpt(model = "gpt-3.5-turbo", mutableListOf(Message(content = "tôi cần bạn việt cho tôi thực đơn trong 1 tuần", role = "user")))
+//                val response = apiService.sendRequestMessage(postGPT)
+//
+//                if (response.isSuccessful) {
+//                    // Handle the successful response
+//                    val responseBody = response.body()
+//                    // Update UI accordingly
+//                    Log.e("callApi", "callApi: success" )
+//                } else {
+//                    // Handle the error response
+//                    // Update UI accordingly
+//                    Log.e("callApi", "callApi: fail" )
+//                }
+//            } catch (e: Exception) {
+//                // Handle exceptions
+//                // Update UI accordingly
+//                Log.e("callApi", "callApi: ${e.message.toString()}" )
+//            }
+//        }
+//    }
 
-    @SuppressLint("ClickableViewAccessibility")
     private fun setUpListeners(){
+        binding.btnShow.setOnClickListener { getSequence().show() }
+        getSequence().show()
+
 //        getSequence().show()
-        buttonSimpleShowCase.setOnClickListener { getSimpleShowCaseBuilder().show() }
-        buttonColorShowCase.setOnClickListener { getCustomColorShowCaseBuilder().show() }
-        buttonTextSizeShowCase.setOnClickListener { getTextSizeShowCaseBuilder().show() }
-        buttonArrowLeftShowCase.setOnClickListener { getArrowLeftShowCaseBuilder().show() }
-        buttonArrowRightShowCase.setOnClickListener { getArrowRightShowCaseBuilder().show() }
-        buttonEventListener.setOnClickListener { getListenerShowCaseBuilder().show() }
-        buttonEventListener1.setOnClickListener { getListenerShowCaseBuilder1().show() }
-        buttonEventListener2.setOnClickListener { getListenerShowCaseBuilder2().show() }
-        buttonEventListener3.setOnClickListener { getListenerShowCaseBuilder3().show() }
-        buttonSequence.setOnClickListener { getSequence().show() }
-
-        layoutRoot.setOnTouchListener { v, event ->
-            Log.e("toaDoManHinh", "x: ${event.x}" )
-            Log.e("toaDoManHinh", "y: ${event.y}" )
-            true
-        }
-
+//        binding.buttonSimpleShowCase.setOnClickListener { getSimpleShowCaseBuilder().show() }
+//        binding.buttonColorShowCase.setOnClickListener { getCustomColorShowCaseBuilder().show() }
+//        binding.buttonTextSizeShowCase.setOnClickListener { getTextSizeShowCaseBuilder().show() }
+//        binding.buttonArrowLeftShowCase.setOnClickListener { getArrowLeftShowCaseBuilder().show() }
+//        binding.buttonArrowRightShowCase.setOnClickListener { getArrowRightShowCaseBuilder().show() }
+//        binding.buttonEventListener.setOnClickListener { getListenerShowCaseBuilder().show() }
+//        binding.buttonSequence.setOnClickListener { getSequence().show() }
     }
 
-    private fun getSimpleShowCaseBuilder(): BubbleShowCaseBuilder{
-        return BubbleShowCaseBuilder(this)
-            .title("Ai Note")
-            .description("( Mới )")
-            .backgroundColor(ContextCompat.getColor(this,R.color.white))
-            .textColor(ContextCompat.getColor(this,R.color.black))
-            .targetView(buttonSimpleShowCase)
-            .listener(object : BubbleShowCaseListener {
-                override fun onBubbleClick(bubbleShowCase: BubbleShowCase) {
-                    Toast.makeText(this@MainActivity, "OnBubbleClick", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onBackgroundDimClick(bubbleShowCase: BubbleShowCase) {
-                    bubbleShowCase.dismiss()
-                    Toast.makeText(this@MainActivity, "OnBackgroundDimClick", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
-                    Toast.makeText(this@MainActivity, "OnTargetClick", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onCloseActionImageClick(bubbleShowCase: BubbleShowCase) {
-                    Toast.makeText(this@MainActivity, "OnClose", Toast.LENGTH_SHORT).show()
-                }
-            })
-            .disableCloseAction(true)
-
-    }
-
-    private fun getCustomColorShowCaseBuilder(): BubbleShowCaseBuilder{
-        return BubbleShowCaseBuilder(this)
-            .title("Ai Note")
-            .description("( Mới )")
-            .backgroundColor(ContextCompat.getColor(this, R.color.colorBlueGray))
-
-            .textColor(ContextCompat.getColor(this,R.color.white)).targetView(buttonColorShowCase)
-    }
-
-    private fun getTextSizeShowCaseBuilder(): BubbleShowCaseBuilder{
-        return BubbleShowCaseBuilder(this)
-            .title("Ai Note")
-            .description("( Mới )")
-            .backgroundColor(ContextCompat.getColor(this, R.color.colorTeal))
-
-
-            .textColor(ContextCompat.getColor(this,R.color.white)).titleTextSize(18)
-            .descriptionTextSize(16)
-            .closeActionImage(null)
-            .targetView(buttonTextSizeShowCase)
-    }
-
-    private fun getArrowLeftShowCaseBuilder(): BubbleShowCaseBuilder{
-        return BubbleShowCaseBuilder(this)
-            .title("Ai Note")
-            .description("( Mới )")
-            .arrowPosition(BubbleShowCase.ArrowPosition.LEFT)
-
-            .textColor(ContextCompat.getColor(this,R.color.white)).backgroundColor(ContextCompat.getColor(this, R.color.colorRed))
-            .targetView(buttonArrowLeftShowCase)
-    }
-
-    private fun getArrowRightShowCaseBuilder(): BubbleShowCaseBuilder{
-        return BubbleShowCaseBuilder(this)
-            .title("Ai Note")
-            .description("( Mới )")
-            .arrowPosition(BubbleShowCase.ArrowPosition.RIGHT)
-
-            .textColor(ContextCompat.getColor(this,R.color.white)).backgroundColor(ContextCompat.getColor(this, R.color.colorPink))
-            .targetView(buttonArrowRightShowCase)
-    }
+    //SHOW CASES GETTERS
+//
+//    private fun getSimpleShowCaseBuilder(): BubbleShowCaseBuilder {
+//        return BubbleShowCaseBuilder(this)
+//            .title("Welcome!!!")
+//            .description("This is a simple BubbleShowCase with default values.")
+//            .targetView(binding.buttonSimpleShowCase)
+//
+//    }
+//
+//    private fun getCustomColorShowCaseBuilder(): BubbleShowCaseBuilder{
+//        return BubbleShowCaseBuilder(this)
+//            .title("Custom your bubble style!")
+//            .description("It is possible to change the text color, background ... and you can even add an image into your bubble.")
+//            .backgroundColor(ContextCompat.getColor(this, R.color.colorBlueGray))
+//            .image(ContextCompat.getDrawable(this, R.drawable.ic_color)!!)
+//            .closeActionImage(ContextCompat.getDrawable(this, R.drawable.ic_close_black)!!)
+//            .textColor(ContextCompat.getColor(this, R.color.colorBlack))
+//            .targetView(binding.buttonColorShowCase)
+//    }
+//
+//    private fun getTextSizeShowCaseBuilder(): BubbleShowCaseBuilder{
+//        return BubbleShowCaseBuilder(this)
+//            .title("Change text sizes!")
+//            .description("You can also choose the best text size for you.")
+//            .backgroundColor(ContextCompat.getColor(this, R.color.colorTeal))
+//            .image(ContextCompat.getDrawable(this, R.drawable.ic_format_size)!!)
+//            .titleTextSize(18)
+//            .descriptionTextSize(16)
+//            .closeActionImage(null)
+//            .targetView(binding.buttonTextSizeShowCase)
+//    }
+//
+//    private fun getArrowLeftShowCaseBuilder(): BubbleShowCaseBuilder{
+//        return BubbleShowCaseBuilder(this)
+//            .title("Force the position of the bubble!")
+//            .description("You only have to specify in which side you want the arrow, and the bubble will be located depending on it.")
+//            .arrowPosition(BubbleShowCase.ArrowPosition.LEFT)
+//            .backgroundColor(ContextCompat.getColor(this, R.color.colorRed))
+//            .targetView(binding.buttonArrowLeftShowCase)
+//    }
+//
+//    private fun getArrowRightShowCaseBuilder(): BubbleShowCaseBuilder{
+//        return BubbleShowCaseBuilder(this)
+//            .title("Arrow set on right side this time :)")
+//            .arrowPosition(BubbleShowCase.ArrowPosition.RIGHT)
+//            .backgroundColor(ContextCompat.getColor(this, R.color.colorPink))
+//            .targetView(binding.buttonArrowRightShowCase)
+//    }
 
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private fun getListenerShowCaseBuilder(): BubbleShowCaseBuilder{
+    private fun getListenerShowCaseBuilder(message1: String,message2: String, targetView: View): BubbleShowCaseBuilder {
         return BubbleShowCaseBuilder(this)
-            .title("Ai Note")
-            .description("( Mới )")
-            .backgroundColor(ContextCompat.getColor(this, R.color.black))
-            .arrowPosition(BubbleShowCase.ArrowPosition.BOTTOM)
-
-            .textColor(ContextCompat.getColor(this,R.color.white))
-//            .closeActionImage(getDrawable(R.drawable.flag_id))
+            .title(message1)
+            .description(message2)
+            .backgroundColor(ContextCompat.getColor(this, R.color.white))
             .disableCloseAction(true)
+            .highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE)
             .listener(object : BubbleShowCaseListener {
                 override fun onBubbleClick(bubbleShowCase: BubbleShowCase) {
-                    Toast.makeText(this@MainActivity, "OnBubbleClick", Toast.LENGTH_SHORT).show()
+                    bubbleShowCase.dismiss()
+//                    Toast.makeText(this@NoteTestBubleActivity, "OnBubbleClick", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onBackgroundDimClick(bubbleShowCase: BubbleShowCase) {
                     bubbleShowCase.dismiss()
-                    Toast.makeText(this@MainActivity, "OnBackgroundDimClick", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this@NoteTestBubleActivity, "OnBackgroundDimClick", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
-                    Toast.makeText(this@MainActivity, "OnTargetClick", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onCloseActionImageClick(bubbleShowCase: BubbleShowCase) {
-                    Toast.makeText(this@MainActivity, "OnClose", Toast.LENGTH_SHORT).show()
-                }
-            })
-            .targetView(buttonEventListener)
-
-    }
-
-    @SuppressLint("UseCompatLoadingForDrawables")
-    private fun getListenerShowCaseBuilder2(): BubbleShowCaseBuilder{
-        return BubbleShowCaseBuilder(this)
-            .title("Ai Note")
-            .description("( Mới )")
-            .backgroundColor(ContextCompat.getColor(this, R.color.black))
-            .arrowPosition(BubbleShowCase.ArrowPosition.BOTTOM)
-
-            .textColor(ContextCompat.getColor(this,R.color.white))
-//            .closeActionImage(getDrawable(R.drawable.flag_id))
-            .disableCloseAction(true)
-            .listener(object : BubbleShowCaseListener {
-                override fun onBubbleClick(bubbleShowCase: BubbleShowCase) {
-                    Toast.makeText(this@MainActivity, "OnBubbleClick", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onBackgroundDimClick(bubbleShowCase: BubbleShowCase) {
                     bubbleShowCase.dismiss()
-                    Toast.makeText(this@MainActivity, "OnBackgroundDimClick", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
-                    Toast.makeText(this@MainActivity, "OnTargetClick", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this@NoteTestBubleActivity, "OnTargetClick", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onCloseActionImageClick(bubbleShowCase: BubbleShowCase) {
-                    Toast.makeText(this@MainActivity, "OnClose", Toast.LENGTH_SHORT).show()
-                }
-            })
-            .targetView(buttonEventListener2)
-
-    }
-
-    @SuppressLint("UseCompatLoadingForDrawables")
-    private fun getListenerShowCaseBuilder1(): BubbleShowCaseBuilder{
-        return BubbleShowCaseBuilder(this)
-            .title("Ai Note")
-            .description("( Mới )")
-            .backgroundColor(ContextCompat.getColor(this, R.color.black))
-            .arrowPosition(BubbleShowCase.ArrowPosition.BOTTOM)
-
-            .textColor(ContextCompat.getColor(this,R.color.white))
-//            .closeActionImage(getDrawable(R.drawable.flag_id))
-            .disableCloseAction(true)
-            .listener(object : BubbleShowCaseListener {
-                override fun onBubbleClick(bubbleShowCase: BubbleShowCase) {
-                    Toast.makeText(this@MainActivity, "OnBubbleClick", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onBackgroundDimClick(bubbleShowCase: BubbleShowCase) {
                     bubbleShowCase.dismiss()
-                    Toast.makeText(this@MainActivity, "OnBackgroundDimClick", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
-                    Toast.makeText(this@MainActivity, "OnTargetClick", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onCloseActionImageClick(bubbleShowCase: BubbleShowCase) {
-                    Toast.makeText(this@MainActivity, "OnClose", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this@NoteTestBubleActivity, "OnClose", Toast.LENGTH_SHORT).show()
                 }
             })
-            .targetView(buttonEventListener1)
-
-    }
-
-    @SuppressLint("UseCompatLoadingForDrawables")
-    private fun getListenerShowCaseBuilder3(): BubbleShowCaseBuilder{
-        return BubbleShowCaseBuilder(this)
-            .title("Ai Note")
-            .description("( Mới )quanhy200123456789")
-            .backgroundColor(ContextCompat.getColor(this, R.color.black))
-            .arrowPosition(BubbleShowCase.ArrowPosition.BOTTOM)
-
-            .textColor(ContextCompat.getColor(this,R.color.white))
-//            .closeActionImage(getDrawable(R.drawable.flag_id))
-            .disableCloseAction(true)
-            .listener(object : BubbleShowCaseListener {
-                override fun onBubbleClick(bubbleShowCase: BubbleShowCase) {
-                    Toast.makeText(this@MainActivity, "OnBubbleClick", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onBackgroundDimClick(bubbleShowCase: BubbleShowCase) {
-                    bubbleShowCase.dismiss()
-                    Toast.makeText(this@MainActivity, "OnBackgroundDimClick", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
-                    Toast.makeText(this@MainActivity, "OnTargetClick", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onCloseActionImageClick(bubbleShowCase: BubbleShowCase) {
-                    Toast.makeText(this@MainActivity, "OnClose", Toast.LENGTH_SHORT).show()
-                }
-            })
-            .targetView(buttonEventListener3)
+            .targetView(targetView)
 
     }
 
     private fun getSequence(): BubbleShowCaseSequence {
         return BubbleShowCaseSequence().addShowCases(listOf(
-            getArrowRightShowCaseBuilder(),
-            getListenerShowCaseBuilder(),
-            getListenerShowCaseBuilder1(),
-            getListenerShowCaseBuilder2(),
-            getSimpleShowCaseBuilder(),
-            getCustomColorShowCaseBuilder(),
-            getTextSizeShowCaseBuilder(),
-            getArrowLeftShowCaseBuilder(),
-
-            ))
+            getListenerShowCaseBuilder("Nhấn để thêm mới","",binding.btnAddNoteNormal),
+            getListenerShowCaseBuilder("AI Note","( Mới )",binding.btnSwitchChecklist),
+            getListenerShowCaseBuilder("Tạo “To do list”","",binding.btnScanText),
+            getListenerShowCaseBuilder("Scan note","( Mới )",binding.btnRecord),
+        ))
     }
 }

@@ -4,9 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/showCaseMessageViewLayout"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:paddingBottom="36dp"
-    android:paddingTop="20dp">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/imageViewShowCase"
@@ -15,7 +13,6 @@
         android:layout_marginStart="0dp"
         android:layout_marginLeft="0dp"
         android:visibility="gone"
-        android:layout_marginTop="16dp"
         android:src="@drawable/rounded_rectangle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,9 +22,7 @@
         android:id="@+id/layoutTexts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toStartOf="@+id/imageViewShowCaseClose"
         app:layout_constraintStart_toEndOf="@+id/imageViewShowCase"
